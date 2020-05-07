@@ -1,0 +1,72 @@
+---
+title: "Assignment-3 Rmd report"
+author: "Joseph Kinyanjui"
+output: html_document
+theme: cosmo
+---
+SOURCE URL: https://github.com/Josephgatonye/Assignment-3/tree/master
+
+# **Gene_expression report**
+
+## Question 1 - downloading the file, reading into R, making the gene accession numbers the row names, and showing a table of values for the first 6 genes
+- Here the 'download.file()' command is used to fetch the dataset and 'read.table()' command  is used to read the tsv file into R.
+- The data frame is then saved as oject "x" for easy computation using the '<-' command.
+- The 'row.names=1' commmand is used to make the gene accession numbers the row names.
+- It is also crucial to set 'header=TRUE' and 'stringAsfactors= FALSE' so that the data is formatted properly. - The 'head ()'command is used to show the first six lines of the data frame and the 'str ()' command ensures that the data structure is recognized as numeric. 
+```{r,chunk1,echo=TRUE}
+#Downloading the file and saving it as "gene_expression.tsv"
+download.file("https://raw.githubusercontent.com/markziemann/SLE712_files/master/bioinfo_asst3_part1_files/gene_expression.tsv",destfile = "gene_expression.tsv") 
+
+#saving the file as an object x
+x <- read.table("gene_expression.tsv") 
+
+#cheking the data structure
+head(x) 
+str(x) 
+
+#Reading into R making sure the 1st columns is set as the rownames, headers are recognized an only first 6 genes are shown
+x <- read.table("gene_expression.tsv",header=TRUE,row.names= 1, stringsAsFactors = FALSE)
+
+# Showing showing a table of values for the first 6 genes
+head(x)
+str(x)
+```
+## Question 2 - Creating a new column which is the mean of other columns, and showing a table of values for the first six genes 
+- We are creating a new column which is the mean of the previous columns using the "rowMeans(x)" command, labelling the new column as "ColumnMeans" and adding it permanently into the data frame "x" using the "$" command and the "<-" command and showing the table of values for the first six genes using the 'head ()' command 
+```{r,chunk2,echo=TRUE}
+# Making a new column ("ColumnMeans") which is the mean of the other columns
+x$ColumnMeans<- rowMeans(x)
+# Showing a table of values for the first six genes
+head(x)
+```
+## Question 3 - Listing the 10 genes with the highest mean expression
+- We already have a column with means of genes saved as 'ColumnMeans'. This column is ordered using 'order(-)' to show decreasing order of means of genes and saved as object 'x_ordered'.
+- The 'list ()' function is used to show the data as a list and square brackets '[1:10,]' command used to specify a range of the first ten genes in the 'x_ordered' data frame.
+```{r,chunk3,echo=TRUE}
+# Listing the 10 genes with the highest mean expression
+x_ordered <- x[order(-x$ColumnMeans),]
+list(x_ordered [1:10,])
+```
+## Question 4 - Determining the number of genes with a mean <10
+- Here we will subset the data frame'x'(which contains all the values), using the 'subset()'command and extract column 'ColumnMeans' which contains means of the genes.
+- The '(x, ColumnMeans <10)' command gives data in the column 'ColumnMeans' which is less than 10, which is saved as 'no_genes'.
+- The 'nrow()' command gives the number of rows in the data frame 'no_genes'
+
+```{r,chunk4,echo=TRUE}
+# Subseting the number of genes with a mean less than 10
+no_genes <- subset(x, ColumnMeans <10)
+nrow(no_genes) # provides the number of genes as 43124
+```
+## Question 5 - Making a histogram plot of the mean values in png format and pasting it into the report
+- The 'hist ()'command is used to plot a histogram 
+```{r,chunk5,echo=TRUE}
+# creating a histogram plot of the mean values
+hist(x$ColumnMeans,main = "Histogram of mean values",xlab ="column means")
+
+#saving histogram as png file
+png("gene_expression.png") #creating a PNG file on the system
+hist(x$ColumnMeans,main = "Histogram of mean values",xlab ="column means")
+
+![alt text](gene_expressionhist.png "gene_expressionhist Plot") #importing the file
+
+```
