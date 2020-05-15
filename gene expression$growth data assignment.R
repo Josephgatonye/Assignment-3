@@ -37,13 +37,15 @@ no_genes <- subset(x, ColumnMeans <10)
 nrow(no_genes) # provides the number of genes as 43124
 
 # creating a histogram plot of the mean values
-hist(x$ColumnMeans)
+hist(x$ColumnMeans,main = "histogram of the mean values",xlab="mean values")
 
 #saving histogram as png file
 
 png("gene_expressionhist.png") #creating a PNG file on the system
 hist(x$ColumnMeans) #adding chart
 dev.off()# closing PNG(Not imported yet)
+
+#GROWTH DATA
 
 # Question 6 
 # Importing the csv file into an R object
@@ -54,8 +56,6 @@ head(g)
 str(x)
 # Finding the column names of 'g'
 colnames(g)
-
-#GROWTH DATA
 
 # Question 7
 ne <- subset(g,Site== "northeast") #subsetting site upto northeast and saving as ne
@@ -75,7 +75,7 @@ sd(sw$Circumf_2004_cm) #getting standard deviation of  circumfrence at the start
 sd(sw$Circumf_2019_cm)#getting standard deviation of  circumfrence at the end
 
 # Question 8
-boxplot(ne$Circumf_2004_cm,sw$Circumf_2019_cm)# box plot of tree circumference at the start and end of the study at north west 
+boxplot(ne$Circumf_2004_cm,ne$Circumf_2019_cm)# box plot of tree circumference at the start and end of the study at north west 
 boxplot(sw$Circumf_2004_cm,sw$Circumf_2019_cm) # box plot of tree circumference at the start and end of the study at south east
 
 #Question 9
@@ -86,4 +86,8 @@ growthdif2<- (sw$Circumf_2019_cm - sw$Circumf_2009_cm) #getting the growth diffe
 mean(growthdif2)# getting the mean of growth difference
 
 # Question 10
-
+# Ho: mean ne$Circumf_2019_cm = mean ne$Circumf_2009_cm 
+# Ha:Two-sided test
+# non-equal variances from boxplot
+t.test(growthdif1,growthdif2)# There is a huge difference because of p-value < 1
+wilcox.test(growthdif1,growthdif2)
