@@ -91,3 +91,6 @@ mean(growthdif2)# getting the mean of growth difference
 # non-equal variances from boxplot
 t.test(growthdif1,growthdif2)# There is a huge difference because of p-value < 1
 wilcox.test(growthdif1,growthdif2)
+Ranks differ 
+
+
