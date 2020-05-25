@@ -1,5 +1,5 @@
 #GENE EXPRESSION 
-#procedure required
+#procedure 
 #Downloading the file and saving it as "gene_expression.tsv"
 download.file("https://raw.githubusercontent.com/markziemann/SLE712_files/master/bioinfo_asst3_part1_files/gene_expression.tsv",destfile = "gene_expression.tsv") 
 
