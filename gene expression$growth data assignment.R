@@ -1,12 +1,12 @@
 #GENE EXPRESSION 
-
+#procedure required
 #Downloading the file and saving it as "gene_expression.tsv"
 download.file("https://raw.githubusercontent.com/markziemann/SLE712_files/master/bioinfo_asst3_part1_files/gene_expression.tsv",destfile = "gene_expression.tsv") 
 
 #reading in the file
 read.table("gene_expression.tsv") 
 
-#saving the file as an object x
+#saving the file as an object x")
 x <- read.table("gene_expression.tsv") 
 
 #cheking the data structure
@@ -50,7 +50,7 @@ dev.off()# closing PNG(Not imported yet)
 # Question 6 
 # Importing the csv file into an R object
 download.file("https://raw.githubusercontent.com/markziemann/SLE712_files/master/bioinfo_asst3_part1_files/growth_data.csv",destfile = "growth_data.csv")
-# Reading csv file into R
+# Reading csv file into R 
 g<- read.csv("growth_data.csv")
 head(g)
 str(x)
