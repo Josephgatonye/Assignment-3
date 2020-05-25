@@ -39,7 +39,12 @@ seqinr::getLength(myseq)# calculating the length (in bp)of GC bases
 seqinr::GC(myseq) # calculating the proportion of GC bases
 ```
 #Question 3
-```{r,chunk3}
+A function that runs blast searches was sourced from unix shell tools.
+
+# Blast search for E.coli genome with the highest similarity to my sample sequence
+Here we are searching the sample sequence against the contents of the set of E.coli gene DNA sequence.
+This can give clues to the origin of the sample sequence.  
+```{r,blast1}
 #myblastn is a wrapper for the unix blastn tool
 #the input is an R sequence and the output is tabular object
 download.file("https://raw.githubusercontent.com/markziemann/SLE712_files/master/bioinfo_asst3_part2_files/mutblast_functions.R",destfile = "mutblast.R")
@@ -58,3 +63,31 @@ hits <- as.character(res$sseqid[1:3])# It is crucial to store the sseqid
 hits# sseqid will be used to determine whether BLAST matches the gene of origin
 ```
 #Question 4
+Creating a mutated copy with multiple substitutions
+```{r,testblast}
+# writing the blast index
+write.fasta(myseq,names="myseq",file.out ="myseq.fa")
+makeblastdb(file = "myseq.fa",dbtype = "nucl")
+
+#test with 20 mutations
+myseq_mut <-mutator (myseq,50)
+res1 <- myblastn_tab(myseq = myseq_mut,db = "myseq.fa")
+res1
+myseq_mut <-mutator (myseq,100)
+res1 <- myblastn_tab(myseq = myseq_mut,db = "myseq.fa")
+res1
+myseq_mut <-mutator (myseq,150)
+res1 <- myblastn_tab(myseq = myseq_mut,db = "myseq.fa")
+res1
+
+myseq_mut <-mutator (myseq,175)
+res1 <- myblastn_tab(myseq = myseq_mut,db = "myseq.fa")
+res1
+myseq_mut <-mutator (myseq,200)
+res1 <- myblastn_tab(myseq = myseq_mut,db = "myseq.fa")
+res1
+```
+
+
+
+
