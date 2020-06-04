@@ -12,8 +12,8 @@ SOURCE URL: https://github.com/Josephgatonye/Assignment-3/tree/master
 # **Gene_expression report**
 
 ## Question 1 - downloading the file, reading into R, making the gene accession numbers the row names, and showing a table of values for the first 6 genes
-- Here the 'download.file()' command is used to fetch the dataset and 'read.table()' command  is used to read the tsv file into R.
-- The data frame is then saved as oject "x" for easy computation using the '<-' command.
+- Here the 'download.file()' command is used to fetch the dataset and 'read.table()' command  is used to read the tsv file into R from an external source.
+- The data frame is then saved as object "x" for easy computation using the '<-' command.
 - The 'row.names=1' commmand is used to make the gene accession numbers the row names.
 - It is also crucial to set 'header=TRUE' and 'stringAsfactors= FALSE' so that the data is formatted properly. - The 'head ()'command is used to show the first six lines of the data frame and the 'str ()' command ensures that the data structure is recognized as numeric. 
 ```{r,chunk1,echo=TRUE}
