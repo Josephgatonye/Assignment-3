@@ -127,4 +127,6 @@ mean(growthdif2)# getting the mean of growth difference
 t.test(growthdif1,growthdif2)# There is a huge difference because of p-value < 1
 wilcox.test(growthdif1,growthdif2)
 ```
-
+t.test is used to test difference between the means of two groups)# For purpose of hypothesis testing in statistics
+calculating t.test requires difference between the mean values from each data  # (p-value <1)                                                                                                                                       
+wilcoxon test is  the rank sum test that compares two paired groups to determine if two or more sets of pairs differ from one another in terms of statistically'
