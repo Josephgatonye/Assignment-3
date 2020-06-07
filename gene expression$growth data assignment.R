@@ -14,11 +14,13 @@ head(x)
 str(x) 
 
 #Reading into R making sure the 1st columns is set as the rownames, headers are recognized an only first 6 genes are shown
-x <- read.table("gene_expression.tsv",header=TRUE,row.names= 1, stringsAsFactors = FALSE)
+x <- read.table("gene_expression.tsv",header=TRUE,row.names=1, stringsAsFactors = FALSE)
 
 #cheking if the data has been imported properly
 head(x)
 str(x)
+#We can check the data dimension as well if the data has been imported correctly
+>dim(xData)
 
 # Making a new column ("ColumnMeans") which is the mean of the other columns
 x$ColumnMeans <- rowMeans(x)
