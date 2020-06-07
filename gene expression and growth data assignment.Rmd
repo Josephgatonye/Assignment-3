@@ -75,10 +75,13 @@ dev.off()
 
 # Question 6 
 # Importing the csv file into an R object
+The backslash is used within the path name to be copied to avoid any eror while copying.
 ```{r,chunk6,echo=TRUE}
 download.file("https://raw.githubusercontent.com/markziemann/SLE712_files/master/bioinfo_asst3_part1_files/growth_data.csv",destfile = "growth_data.csv")
 # Reading csv file into R
 g<- read.csv("growth_data.csv")
+Letting R know that this is comma separeted values
+g<- read.csv("file.choose(), header=T, Sep= ",")
 head(g)
 str(x)
 # Finding the column names of 'g'
@@ -109,6 +112,7 @@ sd(sw$Circumf_2019_cm)#getting standard deviation of  circumfrence at the end
 boxplot(ne$Circumf_2004_cm,ne$Circumf_2019_cm)# box plot of tree circumference at the start and end of the study at north west 
 boxplot(sw$Circumf_2004_cm,sw$Circumf_2019_cm) # box plot of tree circumference at the start and end of the study at south east
 ```
+Box plots divides the data into three parts and therefore the data distribution can be easily visualised.
 
 #Question 9
 ```{r,chunk9,echo=TRUE}
