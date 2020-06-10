@@ -12,12 +12,15 @@ SOURCE URL: https://github.com/Josephgatonye/Assignment-3/tree/master
 # Introduction
 This work will apply BLAST(Basic Local ALignment Search Tool) to run large scale analyses in rstudio. 
 # Installing needed library packages
-There are some library packages that will be installed first to enable smooth working.
+There are some library packages that will be installed first to enable smooth working. These packages are used to load in data to R
 ```{r,libs}
 library("seqinr")
 library("R.utils")
 library("rBLAST")
 ```
+or by using 
+```install.packages(c("dplyr", "purrr", "tidyr")
+
 # Question 1
 # Downloading the set of E.coli gene DNA sequence 
 ```{r,chunk1}
@@ -30,6 +33,7 @@ makeblastdb("E.coli.fa",dbtype = "nucl","-parse_seqids") #create blast and gives
 # Downloading the sample fasta sequences from github 
 download.file("https://raw.githubusercontent.com/markziemann/SLE712_files/master/bioinfo_asst3_part2_files/sample.fa",destfile = "sample.fa")
 # Reading file into R
+This has to be done just within R. 
 sample <- read.fasta("sample.fa")
 myseq <- sample[[27]] #extracting allocated sequence 
 myseq
