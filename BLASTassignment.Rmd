@@ -1,8 +1,7 @@
 ---
 title: "Assignment 3 part 2: Determining the limits of BLAST"
 Unit: "SLE 712: Bioinformatics and molecular biology techniques"
-authors: "Joseph Kinyanjui and Faith Kosgei"
-Student IDs: "220022316 (Joseph) and 219560158 (Faith)"
+author: "Joseph Kinyanjui (ID: 220022316) and Faith Kosgei (ID: 219560158)"
 date: "12/06/2020"
 output:
     rmarkdown::html_document:
@@ -30,7 +29,7 @@ makeblastdb("E.coli.fa",dbtype = "nucl","-parse_seqids") #create blast and gives
 ```
 The results of running the code show that there are 747 sequences E.coli set.
 
-#Question 2
+# Question 2
 
 Just like above the 'download.file()'command is used to download sample fasta sequences from a github repository and the 'destfile = ()' function saves the file as "sample.fa". The 'read.fasta()' command is used to read the file which is in fasta format and the result is saved as an object (sample). My allocated sequence was 27 and square brackets[] function is used to subset it from the list(sample) and the result saved as 'myseq'. The 'seqinr::getLength()'command is used to calculate the length (in bp) and the proportion of the GC bases is calculated using the 'seqinr::GC()'command. 
 ```{r,chunk2}
@@ -48,7 +47,7 @@ seqinr::GC(myseq) # calculating the proportion of GC bases
 ```
 The lenght of the sequence is 747bp and the proportion of GC bases is 0.5354752
 
-#Question 3
+# Question 3
 
 The myblastn () function that runs blast searches was sourced from unix shell tool in a github repository.The input is an R sequence and the output is tabular object.
 The allocated sequence is searched against the contents of the set of E.coli gene DNA sequence to identify what 
@@ -75,7 +74,7 @@ Species :Escherichia coli str. K-12 substr. MG1655
 About gene: This gene has 1 transcript
 Gene type: Protein coding
 
-#Question 4
+# Question 4
 
 The mutator() function is used to a set number of point mutations to the allocated sequence. The mutated version is converted to DNAstrings and Pairwise Sequence Alignment is conducted to discover the similarity between the mutated copy and the original sequence. The nmistmatch() function gives the number of mismatch. 
 ```{r,testblast}
@@ -109,23 +108,31 @@ return(myres)
 }
 
 # testing with multiple mutations
-
-# nmut=100
-myfunc(myseq=myseq,nmut = 100)
-mean (replicate(100,myfunc(myseq,100)))
+myfunc(myseq=myseq,nmut=100)
+# nmut=100 and replicating 100 times
+mean (replicate(n = 100, expr = myfunc(myseq=myseq,nmut=100) ))
 
 # nmut=150
-myfunc(myseq=myseq,nmut = 150)
-mean (replicate(100,myfunc(myseq,150)))
+mean (replicate(n = 100, expr = myfunc(myseq=myseq,nmut=150) ))
 
 #nmut=175
-myfunc(myseq=myseq,nmut = 175)
-mean (replicate(100,myfunc(myseq,175)))
+mean (replicate(n = 100, expr = myfunc(myseq=myseq,nmut=169) ))
 
 # nmut=169 seems to be the limits of BLAST
-myfunc(myseq=myseq,nmut = 169)
-mean (replicate(100,myfunc(myseq,169)))
+mean (replicate(n = 100, expr = myfunc(myseq=myseq,nmut=175) ))
+
+#nmut=200
+mean (replicate(n = 100, expr = myfunc(myseq=myseq,nmut=200) ))
 ```
+# Question 6
+
+```{r,charting}
+# plotting the results replications above
+png ("example.png") 
+plot (c(1,1,0.76, 0.56, 0.51,0.23),type="b",xlab="proportion of sites randomised",ylab="proportion of successful BLASTs",main="How increasing random base proportion affects BLAST performance")
+dev.off
+```
+![alt text](example.png "Example Plot")
 
 # References
 
