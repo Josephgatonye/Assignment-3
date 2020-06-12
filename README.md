@@ -1,5 +1,5 @@
 # Assignment-3
-This are files that have been used to answer the questions in assignment 3 of SLE 712 Bioinformatics and Biotechnology at Deakin University
+These are files that have been used to answer the questions in assignment 3 of SLE 712 Bioinformatics and Biotechnology at Deakin University
 ## Contents
 -ReadMe file in markdown
 -Assignments markdown files  
@@ -12,11 +12,11 @@ This is a markdown file of the gene expression and growth data assignment. The t
 To understand and apply knowledge taught in bionformatics to solve examples of real world problems. 
 
 ## Installation
-Rstudio Version 1.2.1335 and R version 3.6.3
+The codes work in RStudio Version 1.2.1335R which works with R version 3.6.3 (2020-02-29) runnning under Ubuntu 18.04.4 LTS operating system
 
 ## License
 A GENERAL PUBLIC LICENSE version 3, 29 June 2007, is added to make the repository an open source so that other people have the fredom to use and change
 
 ## Credits 
-Joseph Kinyanjui 
+Joseph Kinyanjui and Faith Kosgei
 

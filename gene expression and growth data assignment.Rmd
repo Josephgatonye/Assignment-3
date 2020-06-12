@@ -1,6 +1,6 @@
 ---
 title: "Assignment-3 Rmd report"
-author: "Joseph Kinyanjui"
+author: "Joseph Kinyanjui and Faith Kosgei"
 theme: cosmo
 output:
   html_document: default
@@ -11,11 +11,8 @@ SOURCE URL: https://github.com/Josephgatonye/Assignment-3/tree/master
 
 # **Gene_expression report**
 
-## Question 1 - downloading the file, reading into R, making the gene accession numbers the row names, and showing a table of values for the first 6 genes
-- Here the 'download.file()' command is used to fetch the dataset and 'read.table()' command  is used to read the tsv file into R.
-- The data frame is then saved as oject "x" for easy computation using the '<-' command.
-- The 'row.names=1' commmand is used to make the gene accession numbers the row names.
-- It is also crucial to set 'header=TRUE' and 'stringAsfactors= FALSE' so that the data is formatted properly. - The 'head ()'command is used to show the first six lines of the data frame and the 'str ()' command ensures that the data structure is recognized as numeric. 
+## Question 1 
+Here the 'download.file()' command is used to fetch the dataset. The 'read.table()' command  is used to read the tsv file into R and the data frame is then saved as an object for easy computation. The 'row.names=1' commmand is used to make the gene accession numbers the row names. It is also crucial to set 'header=TRUE' and 'stringAsfactors= FALSE' so that the data is formatted properly. The 'head ()'command is used to show the first six lines of the data frame and the 'str ()' command checks that the data structure is recognized as numeric. 
 ```{r,chunk1,echo=TRUE}
 #Downloading the file and saving it as "gene_expression.tsv"
 download.file("https://raw.githubusercontent.com/markziemann/SLE712_files/master/bioinfo_asst3_part1_files/gene_expression.tsv",destfile = "gene_expression.tsv") 
@@ -34,97 +31,133 @@ x <- read.table("gene_expression.tsv",header=TRUE,row.names= 1, stringsAsFactors
 head(x)
 str(x)
 ```
-## Question 2 - Creating a new column which is the mean of other columns, and showing a table of values for the first six genes 
-- We are creating a new column which is the mean of the previous columns using the "rowMeans(x)" command, labelling the new column as "ColumnMeans" and adding it permanently into the data frame "x" using the "$" command and the "<-" command and showing the table of values for the first six genes using the 'head ()' command 
+## Question 2 
+We are creating a new column which is the mean of the previous columns using the "rowMeans(x)" command, labelling the new column as "ColumnMeans" and adding it permanently into the data frame "x" using the "$" command. The table of values for the first six genes is showed using the 'head ()' command 
 ```{r,chunk2,echo=TRUE}
 # Making a new column ("ColumnMeans") which is the mean of the other columns
 x$ColumnMeans<- rowMeans(x)
 # Showing a table of values for the first six genes
 head(x)
 ```
-## Question 3 - Listing the 10 genes with the highest mean expression
-- We already have a column with means of genes saved as 'ColumnMeans'. This column is ordered using 'order(-)' to show decreasing order of means of genes and saved as object 'x_ordered'.
-- The 'list ()' function is used to show the data as a list and square brackets '[1:10,]' command used to specify a range of the first ten genes in the 'x_ordered' data frame.
+## Question 3 
+We already have a column with means of genes saved and it is ordered using 'order(-)' command to show decreasing order of means of genes and saved as object 'x_ordered'. The 'list ()'command is used to show the data as a list and square brackets command used to specify a range of the first ten genes in the new data frame.
 ```{r,chunk3,echo=TRUE}
 # Listing the 10 genes with the highest mean expression
 x_ordered <- x[order(-x$ColumnMeans),]
 list(x_ordered [1:10,])
 ```
-## Question 4 - Determining the number of genes with a mean <10
-- Here we will subset the data frame'x'(which contains all the values), using the 'subset()'command and extract column 'ColumnMeans' which contains means of the genes.
-- The '(x, ColumnMeans <10)' command gives data in the column 'ColumnMeans' which is less than 10, which is saved as 'no_genes'.
-- The 'nrow()' command gives the number of rows in the data frame 'no_genes'
+## Question 4 
+Here we will subset the data frame using the 'subset()'command and extract the column which contains means of the genes which is less than 10. The 'nrow()' command gives the number of rows in the data frame.
 
 ```{r,chunk4,echo=TRUE}
 # Subseting the number of genes with a mean less than 10
 no_genes <- subset(x, ColumnMeans <10)
 nrow(no_genes) # provides the number of genes as 43124
 ```
-## Question 5 - Making a histogram plot of the mean values in png format and pasting it into the report
-- The 'hist ()'command is used to plot a histogram 
+## Question 5 
+The first step is to create a png file using the png() command and add the histogram plot created with the hist () command. The second step is to import the file using the ![]() command into the report.
+step 1 :saving histogram as png file
 ```{r,chunk5,echo=TRUE}
-#saving histogram as png file
-png("gene_expression.png") #creating a PNG file on the system
+png("gene_expression.png") 
 hist(x$ColumnMeans,main = "Histogram of mean values",xlab ="column means")
 dev.off()
 ```
-
-![](gene_expression.png "gene_expression Plot") #importing the file
+step 2 :pasting into report
+![](gene_expression.png "gene_expression Plot") 
 
 #GROWTH DATA
 
 # Question 6 
-# Importing the csv file into an R object
+The “growth_data.csv” file is downloaded and read into R using the read.csv () command. The colnames ()command is used to extract the names of the columns in the data frame.
 ```{r,chunk6,echo=TRUE}
 download.file("https://raw.githubusercontent.com/markziemann/SLE712_files/master/bioinfo_asst3_part1_files/growth_data.csv",destfile = "growth_data.csv")
 # Reading csv file into R
 g<- read.csv("growth_data.csv")
 head(g)
 str(x)
-# Finding the column names of 'g'
+# Finding the column names
 colnames(g)
 ```
 
 # Question 7
-```{r,chunk7,echo=TRUE}
+We begin by first subsetting the data frame into the two control sites (north east and southwest) and then extracting the columns with the data at the start and the end of the study. Mean is calculated using the mean ()command and standard deviation calculated using the sd ()command.
+```{r,chunk71,echo=TRUE}
 ne <- subset(g,Site== "northeast") #subsetting site upto northeast and saving as ne
-head(ne)#checking structure
+#checking structure
+head(ne)
 str(ne)
-mean(ne$Circumf_2004_cm)# getting the mean of circumfrence at the start
-mean(ne$Circumf_2019_cm)# getting the mean of circumfrence at the end
-sd(ne$Circumf_2004_cm) #getting standard deviation of  circumfrence at the start
-sd(ne$Circumf_2019_cm)#getting standard deviation of  circumfrence at the end
+# getting the mean of circumfrence at the start
+mean(ne$Circumf_2004_cm, ) 
+# getting the mean of circumfrence at the end
+mean(ne$Circumf_2019_cm)
+#getting standard deviation of  circumfrence at the start
+sd(ne$Circumf_2004_cm)
+#getting standard deviation of  circumfrence at the end
+sd(ne$Circumf_2019_cm)
+```
 
-sw <- subset(g,Site== "southwest")#subsetting site upto southwest and saving as sw
+```{r,chunk72,echo=TRUE}
+#subsetting site upto southwest and saving as sw
+sw <- subset(g,Site== "southwest")
+# checking the data structure
 head(sw)
 str(sw)
-mean(sw$Circumf_2004_cm)# getting the mean of circumfrence at the start
-mean(sw$Circumf_2019_cm)# getting the mean of circumfrence at the end
-sd(sw$Circumf_2004_cm) #getting standard deviation of  circumfrence at the start
-sd(sw$Circumf_2019_cm)#getting standard deviation of  circumfrence at the end
+# getting the mean of circumfrence at the start
+mean(sw$Circumf_2004_cm)
+# getting the mean of circumfrence at the end
+mean(sw$Circumf_2019_cm)
+#getting standard deviation of  circumfrence at the start
+sd(sw$Circumf_2004_cm)
+#getting standard deviation of  circumfrence at the end
+sd(sw$Circumf_2019_cm)
 ```
 
 # Question 8
-```{r,chunk8,echo=TRUE}
-boxplot(ne$Circumf_2004_cm,ne$Circumf_2019_cm)# box plot of tree circumference at the start and end of the study at north west 
-boxplot(sw$Circumf_2004_cm,sw$Circumf_2019_cm) # box plot of tree circumference at the start and end of the study at south east
+The boxpot() command used to make a boxplot of tree circumference at the start and end of the study at both sites.
+```{r,chunk8-1,echo=TRUE}
+# box plot of tree circumference at the start and end of the study at north west 
+boxplot(ne$Circumf_2004_cm,ne$Circumf_2019_cm)
 ```
 
+```{r,chunk8-2,echo=TRUE}
+ # box plot of tree circumference at the start and end of the study at south east
+boxplot(sw$Circumf_2004_cm,sw$Circumf_2019_cm)
+```
+The boxplots show non-equal variances.
 #Question 9
-```{r,chunk9,echo=TRUE}
-growthdif1<- (ne$Circumf_2019_cm - ne$Circumf_2009_cm) #getting the growth difference over 10 years(2009$2019) @ North east
-mean(growthdif1)# getting the mean of growth difference
-
-growthdif2<- (sw$Circumf_2019_cm - sw$Circumf_2009_cm) #getting the growth difference over 10 years(2009$2019) @ south west
-mean(growthdif2)# getting the mean of growth difference
+The growth difference over the past 10 years at each site is calculated by subtraction using the recent data (2019 and 2009) and the result saved as an R object. The mean()command is then applied to the saved object to  calculate the mean.
+North east site
+```{r,chunk9-1,echo=TRUE}
+#getting the growth difference over 10 years(2009$2019) @ North east
+growthdif1<- (ne$Circumf_2019_cm - ne$Circumf_2009_cm)
+# getting the mean of growth difference
+mean(growthdif1)
+```
+South east site
+```{r,chunk9-2,echo=TRUE}
+#getting the growth difference over 10 years(2009$2019) @ south west
+growthdif2<- (sw$Circumf_2019_cm - sw$Circumf_2009_cm)
+# getting the mean of growth difference
+mean(growthdif2)
 ```
 
 # Question 10
+A t. test shows the significance of the differences between two groups which can be used to find out if the differences could haver occured by chance (Statistics How To 2020). The Wilcoxon rank sum test checks if the distributions of observations acquired between two separate groups are significantly different from each other (Salkind, N.J 2010). The t.test () and wilcox.test () commands will be used to estimate the p-value that the 10 year growth is different at the two sites.
 # Ho: mean ne$Circumf_2019_cm = mean ne$Circumf_2009_cm 
 # Ha:Two-sided test
 # non-equal variances from boxplot
 ```{r,chunk10,echo=TRUE}
-t.test(growthdif1,growthdif2)# There is a huge difference because of p-value < 1
+t.test(growthdif1,growthdif2)
+```
+```{r,chunk10,echo=TRUE}
 wilcox.test(growthdif1,growthdif2)
 ```
+P- values show that there is a huge difference between growth in the sites
+
+References
+
+Statistics How To 2020, 
+T Test (Student’s T-Test): Definition and Examples, retrieved June 2 2020, <https://www.statisticshowto.com/probability-and-statistics/t-test/>.
+
+Salkind, N.J 2010, Encyclopedia of research design, vol. 0, SAGE Publications, Inc., Thousand Oaks, CA, [Accessed 12 June 2020], doi: 10.4135/9781412961288.
 
