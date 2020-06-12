@@ -19,7 +19,7 @@ To understand and apply knowledge taught in bionformatics to solve examples of r
 The codes work in RStudio Version 1.2.1335R which works with R version 3.6.3 (2020-02-29) runnning under Ubuntu 18.04.4 LTS operating system
 
 ## License
-A GENERAL PUBLIC LICENSE version 3, 29 June 2007, is added to make the repository an open source so that other people have the fredom to use and change
+A GENERAL PUBLIC LICENSE version 3, 29 June 2007, is added to make the repository an open source so that other people have the freedom to use and change
 
 ## Credits 
 Joseph Kinyanjui and Faith Kosgei

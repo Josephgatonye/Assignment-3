@@ -1,6 +1,8 @@
 ---
 title: "Bioinformatics Assignment 3: Importing files, data wrangling, mathematical operations, plots and saving code on GitHub Report"
-author: "Joseph Kinyanjui and Faith Kosgei"
+Unit: "SLE 712: Bioinformatics and molecular biology techniques"
+authors: "Joseph Kinyanjui and Faith Kosgei"
+Student IDs: "220022316 (Joseph) and 219560158 (Faith)"
 date: "12/06/2020"
 output:
     rmarkdown::html_document:
@@ -12,16 +14,8 @@ Source: https://github.com/Josephgatonye/Assignment-3/tree/master
 
 # Gene expression
 
-<<<<<<< HEAD
 ## Question 1 
 The `download.file()`  command is used to fetch the dataset. The `read.table()` command  is used to read the tsv file into R and the data frame is then saved as an object for easy computation. The `row.names=1` commmand is used to make the gene accession numbers the row names. It is also crucial to set 'header=TRUE' and `stringAsfactors= FALSE` so that the data is formatted properly. The `head ()`command is used to show the first six lines of the data frame and the `str ()` command checks that the data structure is recognized as numeric. 
-=======
-## Question 1 - downloading the file, reading into R, making the gene accession numbers the row names, and showing a table of values for the first 6 genes
-- Here the 'download.file()' command is used to fetch the dataset and 'read.table()' command  is used to read the tsv file into R from an external source.
-- The data frame is then saved as object "x" for easy computation using the '<-' command.
-- The 'row.names=1' commmand is used to make the gene accession numbers the row names.
-- It is also crucial to set 'header=TRUE' and 'stringAsfactors= FALSE' so that the data is formatted properly. - The 'head ()'command is used to show the first six lines of the data frame and the 'str ()' command ensures that the data structure is recognized as numeric. 
->>>>>>> d176c13b86a784d4526949c8320396630edcdb07
 ```{r,chunk1,echo=TRUE}
 #Downloading the file and saving it as "gene_expression.tsv"
 download.file("https://raw.githubusercontent.com/markziemann/SLE712_files/master/bioinfo_asst3_part1_files/gene_expression.tsv",destfile = "gene_expression.tsv") 
@@ -76,20 +70,12 @@ dev.off()
 
 # Growth data
 
-<<<<<<< HEAD
 ## Question 6 
 The `growth_data.csv` file is downloaded and read into R using the `read.csv ()` command. The `colnames ()`command is used to extract the names of the columns in the data frame.
-=======
-# Question 6 
-# Importing the csv file into an R object
-The backslash is used within the path name to be copied to avoid any eror while copying.
->>>>>>> d176c13b86a784d4526949c8320396630edcdb07
 ```{r,chunk6,echo=TRUE}
 download.file("https://raw.githubusercontent.com/markziemann/SLE712_files/master/bioinfo_asst3_part1_files/growth_data.csv",destfile = "growth_data.csv")
 # Reading csv file into R
 g<- read.csv("growth_data.csv")
-Letting R know that this is comma separeted values
-g<- read.csv("file.choose(), header=T, Sep= ",")
 head(g)
 str(x)
 # Finding the column names
@@ -133,7 +119,6 @@ sd(sw$Circumf_2004_cm)
 #getting standard deviation of  circumfrence at the end
 sd(sw$Circumf_2019_cm)
 ```
-Box plots divides the data into three parts and therefore the data distribution can be easily visualised.
 
 ## Question 8
 The `boxpot()` command used to make a boxplot of tree circumference at the start and end of the study at both sites.
@@ -147,6 +132,7 @@ boxplot(ne$Circumf_2004_cm,ne$Circumf_2019_cm)
 boxplot(sw$Circumf_2004_cm,sw$Circumf_2019_cm)
 ```
 The boxplots show non-equal variances.
+
 ## Question 9
 The growth difference over the past 10 years at each site is calculated by subtraction using the recent data (2019 and 2009) and the result saved as an R object. The `mean()`command is then applied to the saved object to calculate the mean.
 North east site
@@ -173,7 +159,6 @@ t.test(growthdif1,growthdif2)
 ```{r,chunk10-2,echo=TRUE}
 wilcox.test(growthdif1,growthdif2)
 ```
-<<<<<<< HEAD
 P- values show that there is a huge difference between growth in the sites
 
 # References
@@ -185,8 +170,3 @@ Salkind, N.J 2010, Encyclopedia of research design, vol. 0, SAGE Publications, I
 
 
 
-=======
-t.test is used to test difference between the means of two groups)# For purpose of hypothesis testing in statistics
-calculating t.test requires difference between the mean values from each data  # (p-value <1)                                                                                                                                       
-wilcoxon test is  the rank sum test that compares two paired groups to determine if two or more sets of pairs differ from one another in terms of statistically'
->>>>>>> d176c13b86a784d4526949c8320396630edcdb07

@@ -1,5 +1,8 @@
-title: "Bioinformatics Assignment 3 part 2: Determine the limits of BLAST"
-author: "Joseph Kinyanjui and Faith Kosgei"
+---
+title: "Assignment 3 part 2: Determining the limits of BLAST"
+Unit: "SLE 712: Bioinformatics and molecular biology techniques"
+authors: "Joseph Kinyanjui and Faith Kosgei"
+Student IDs: "220022316 (Joseph) and 219560158 (Faith)"
 date: "12/06/2020"
 output:
     rmarkdown::html_document:
@@ -8,21 +11,17 @@ theme: cosmo
 ---
 SOURCE URL: https://github.com/Josephgatonye/Assignment-3/tree/master
 
-# **Determining the limits of BLAST assignment**
 # Introduction
-This work will apply BLAST(Basic Local ALignment Search Tool) to run large scale analyses in rstudio. 
-# Installing needed library packages
-There are some library packages that will be installed first to enable smooth working. These packages are used to load in data to R
+
+This work will apply BLAST(Basic Local ALignment Search Tool) to run large scale analyses in rstudio. There are some library packages that will be installed first to enable smooth working. These packages are used to load in data to R
 ```{r,libs}
 library("seqinr")
 library("R.utils")
 library("rBLAST")
 ```
-or by using 
-```install.packages(c("dplyr", "purrr", "tidyr")
 
 # Question 1
-# Downloading the set of E.coli gene DNA sequence
+
 The 'download.file()'command is used to download the whole set of E.coli gene DNA sequences from EnsemblBacteria website and the 'destfile = ()' command  saves the file as "E.coli.fa.gz". The 'gunzip()' command is used to decompress the file and the 'makeblast()'  function creates a blast database. 
 ```{r,chunk1}
 download.file("ftp://ftp.ensemblgenomes.org/pub/bacteria/release-42/fasta/bacteria_0_collection/escherichia_coli_str_k_12_substr_mg1655/cds/Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa.gz",destfile = "E.coli.fa.gz")
@@ -30,16 +29,18 @@ gunzip("E.coli.fa.gz")
 makeblastdb("E.coli.fa",dbtype = "nucl","-parse_seqids") #create blast and gives the numbers of sequences present in the E.coli set
 ```
 The results of running the code show that there are 747 sequences E.coli set.
+
 #Question 2
+
 Just like above the 'download.file()'command is used to download sample fasta sequences from a github repository and the 'destfile = ()' function saves the file as "sample.fa". The 'read.fasta()' command is used to read the file which is in fasta format and the result is saved as an object (sample). My allocated sequence was 27 and square brackets[] function is used to subset it from the list(sample) and the result saved as 'myseq'. The 'seqinr::getLength()'command is used to calculate the length (in bp) and the proportion of the GC bases is calculated using the 'seqinr::GC()'command. 
 ```{r,chunk2}
 # Downloading the sample fasta sequences from github 
 download.file("https://raw.githubusercontent.com/markziemann/SLE712_files/master/bioinfo_asst3_part2_files/sample.fa",destfile = "sample.fa")
 # Reading file into R
-This has to be done just within R. 
 sample <- read.fasta("sample.fa")
 myseq <- sample[[27]] #extracting allocated sequence 
 myseq
+
 # Calculating GC contents
 str(myseq)
 seqinr::getLength(myseq)# calculating the length (in bp)of GC bases
@@ -48,6 +49,7 @@ seqinr::GC(myseq) # calculating the proportion of GC bases
 The lenght of the sequence is 747bp and the proportion of GC bases is 0.5354752
 
 #Question 3
+
 The myblastn () function that runs blast searches was sourced from unix shell tool in a github repository.The input is an R sequence and the output is tabular object.
 The allocated sequence is searched against the contents of the set of E.coli gene DNA sequence to identify what 
 E. coli gene the allocated sequence matches best using. The result is saved as an object res.This can give clues to the origin of the sample sequence. The sseqid command will be used to determine whether BLAST matches the gene of origin and it is stored as object (hits). 
@@ -56,10 +58,12 @@ download.file("https://raw.githubusercontent.com/markziemann/SLE712_files/master
 source("mutblast.R")
 #test the function
 res <- myblastn_tab(myseq = myseq,db = "E.coli.fa")
+
 # Check out the blast results
 res
 str(res)
 head(res)
+
 # Determining the top 3 hits
 hits <- as.character(res$sseqid[1:3])
 hits
@@ -72,23 +76,28 @@ About gene: This gene has 1 transcript
 Gene type: Protein coding
 
 #Question 4
+
 The mutator() function is used to a set number of point mutations to the allocated sequence. The mutated version is converted to DNAstrings and Pairwise Sequence Alignment is conducted to discover the similarity between the mutated copy and the original sequence. The nmistmatch() function gives the number of mismatch. 
 ```{r,testblast}
 # writing the blast index
 write.fasta(myseq,names="myseq",file.out ="myseq.fa")
 makeblastdb(file = "myseq.fa",dbtype = "nucl")
+
 # create a mutated copy with 100 substitutions 
 myseq_mut <-mutator (myseq,100)
+
 # Creating a pairwise alignment 
 myseq_mut_ <- DNAString(c2s(myseq_mut))
 myseq_ <- DNAString(c2s(myseq))
 aln <- Biostrings::pairwiseAlignment(myseq_,myseq_mut_)
+
 # getting number of mismatch
 nmismatch(aln) 
 ```
 Results show that there are 70 mismatches between the two sequences.
 
 # Question 5
+
 A function called 'myfunc' is created which randomises with the 'mutator()' function, performs blast search with 'myblastn_tab ()' function and summarizes the results return as a 0 or 1. The replicate () command is applied to the function to repeat the operation 100 times so as to provide an accurate and reproducible result. The mean of the replicate results is calculated to get the propotion of the number of BLASTs that were successful.
 ```{r,useblast}
 # creating the function
@@ -98,7 +107,9 @@ res1 <- myblastn_tab(myseq = myseq_mut,db = "myseq.fa")
 if (is.null(res1)) {myres= 0 } else {myres= 1 }
 return(myres)
 }
+
 # testing with multiple mutations
+
 # nmut=100
 myfunc(myseq=myseq,nmut = 100)
 mean (replicate(100,myfunc(myseq,100)))
