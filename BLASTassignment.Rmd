@@ -98,6 +98,7 @@ Results show that there are 70 mismatches between the two sequences.
 # Question 5
 
 A function called 'myfunc' is created which randomises with the 'mutator()' function, performs blast search with 'myblastn_tab ()' function and summarizes the results return as a 0 or 1. The replicate () command is applied to the function to repeat the operation 100 times so as to provide an accurate and reproducible result. The mean of the replicate results is calculated to get the propotion of the number of BLASTs that were successful.
+
 ```{r,useblast}
 # creating the function
 myfunc <- function(myseq,nmut) {
@@ -130,9 +131,11 @@ mean (replicate(n = 100, expr = myfunc(myseq=myseq,nmut=200) ))
 # plotting the results replications above
 png ("example.png") 
 plot (c(1,1,0.76, 0.56, 0.51,0.23),type="b",xlab="proportion of sites randomised",ylab="proportion of successful BLASTs",main="How increasing random base proportion affects BLAST performance")
-dev.off
+dev.off()
 ```
 ![alt text](example.png "Example Plot")
+
+
 
 # References
 
