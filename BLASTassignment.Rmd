@@ -1,6 +1,6 @@
-title: "Assignment-3 Rmd report"
-author: "Joseph Kinyanjui"
-date:
+title: "Bioinformatics Assignment 3 part 2: Determine the limits of BLAST"
+author: "Joseph Kinyanjui and Faith Kosgei"
+date: "12/06/2020"
 output:
     rmarkdown::html_document:
         toc: true
@@ -19,13 +19,16 @@ library("R.utils")
 library("rBLAST")
 ```
 # Question 1
-# Downloading the set of E.coli gene DNA sequence 
+# Downloading the set of E.coli gene DNA sequence
+The 'download.file()'command is used to download the whole set of E.coli gene DNA sequences from EnsemblBacteria website and the 'destfile = ()' command  saves the file as "E.coli.fa.gz". The 'gunzip()' command is used to decompress the file and the 'makeblast()'  function creates a blast database. 
 ```{r,chunk1}
 download.file("ftp://ftp.ensemblgenomes.org/pub/bacteria/release-42/fasta/bacteria_0_collection/escherichia_coli_str_k_12_substr_mg1655/cds/Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa.gz",destfile = "E.coli.fa.gz")
 gunzip("E.coli.fa.gz")
 makeblastdb("E.coli.fa",dbtype = "nucl","-parse_seqids") #create blast and gives the numbers of sequences present in the E.coli set
 ```
+The results of running the code show that there are 747 sequences E.coli set.
 #Question 2
+Just like above the 'download.file()'command is used to download sample fasta sequences from a github repository and the 'destfile = ()' function saves the file as "sample.fa". The 'read.fasta()' command is used to read the file which is in fasta format and the result is saved as an object (sample). My allocated sequence was 27 and square brackets[] function is used to subset it from the list(sample) and the result saved as 'myseq'. The 'seqinr::getLength()'command is used to calculate the length (in bp) and the proportion of the GC bases is calculated using the 'seqinr::GC()'command. 
 ```{r,chunk2}
 # Downloading the sample fasta sequences from github 
 download.file("https://raw.githubusercontent.com/markziemann/SLE712_files/master/bioinfo_asst3_part2_files/sample.fa",destfile = "sample.fa")
@@ -38,56 +41,80 @@ str(myseq)
 seqinr::getLength(myseq)# calculating the length (in bp)of GC bases
 seqinr::GC(myseq) # calculating the proportion of GC bases
 ```
-#Question 3
-A function that runs blast searches was sourced from unix shell tools.
+The lenght of the sequence is 747bp and the proportion of GC bases is 0.5354752
 
-# Blast search for E.coli genome with the highest similarity to my sample sequence
-Here we are searching the sample sequence against the contents of the set of E.coli gene DNA sequence.
-This can give clues to the origin of the sample sequence.  
+#Question 3
+The myblastn () function that runs blast searches was sourced from unix shell tool in a github repository.The input is an R sequence and the output is tabular object.
+The allocated sequence is searched against the contents of the set of E.coli gene DNA sequence to identify what 
+E. coli gene the allocated sequence matches best using. The result is saved as an object res.This can give clues to the origin of the sample sequence. The sseqid command will be used to determine whether BLAST matches the gene of origin and it is stored as object (hits). 
 ```{r,blast1}
-#myblastn is a wrapper for the unix blastn tool
-#the input is an R sequence and the output is tabular object
 download.file("https://raw.githubusercontent.com/markziemann/SLE712_files/master/bioinfo_asst3_part2_files/mutblast_functions.R",destfile = "mutblast.R")
 source("mutblast.R")
 #test the function
 res <- myblastn_tab(myseq = myseq,db = "E.coli.fa")
 # Check out the blast results
 res
-# Gene ID :fpr b3924
-# Description:ferredoxin-NADP reductase; flavodoxin reductase
-#About gene: This gene has 1 transcript
-#Gene type: Protein coding
 str(res)
 head(res)
-hits <- as.character(res$sseqid[1:3])# It is crucial to store the sseqid
-hits# sseqid will be used to determine whether BLAST matches the gene of origin
+# Determining the top 3 hits
+hits <- as.character(res$sseqid[1:3])
+hits
 ```
+There was only one hit found and the table above shows percent identity, E-value and bit scores. The gene information is provided below (EnsemblBacteria 2020).
+Gene ID :fpr b3924
+Description:ferredoxin-NADP reductase; flavodoxin reductase
+Species :Escherichia coli str. K-12 substr. MG1655
+About gene: This gene has 1 transcript
+Gene type: Protein coding
+
 #Question 4
-Creating a mutated copy with multiple substitutions
+The mutator() function is used to a set number of point mutations to the allocated sequence. The mutated version is converted to DNAstrings and Pairwise Sequence Alignment is conducted to discover the similarity between the mutated copy and the original sequence. The nmistmatch() function gives the number of mismatch. 
 ```{r,testblast}
 # writing the blast index
 write.fasta(myseq,names="myseq",file.out ="myseq.fa")
 makeblastdb(file = "myseq.fa",dbtype = "nucl")
-
-#test with 20 mutations
-myseq_mut <-mutator (myseq,50)
-res1 <- myblastn_tab(myseq = myseq_mut,db = "myseq.fa")
-res1
+# create a mutated copy with 100 substitutions 
 myseq_mut <-mutator (myseq,100)
-res1 <- myblastn_tab(myseq = myseq_mut,db = "myseq.fa")
-res1
-myseq_mut <-mutator (myseq,150)
-res1 <- myblastn_tab(myseq = myseq_mut,db = "myseq.fa")
-res1
+# Creating a pairwise alignment 
+myseq_mut_ <- DNAString(c2s(myseq_mut))
+myseq_ <- DNAString(c2s(myseq))
+aln <- Biostrings::pairwiseAlignment(myseq_,myseq_mut_)
+# getting number of mismatch
+nmismatch(aln) 
+```
+Results show that there are 70 mismatches between the two sequences.
 
-myseq_mut <-mutator (myseq,175)
+# Question 5
+A function called 'myfunc' is created which randomises with the 'mutator()' function, performs blast search with 'myblastn_tab ()' function and summarizes the results return as a 0 or 1. The replicate () command is applied to the function to repeat the operation 100 times so as to provide an accurate and reproducible result. The mean of the replicate results is calculated to get the propotion of the number of BLASTs that were successful.
+```{r,useblast}
+# creating the function
+myfunc <- function(myseq,nmut) {
+myseq_mut <-mutator (myseq= myseq, nmut = nmut)
 res1 <- myblastn_tab(myseq = myseq_mut,db = "myseq.fa")
-res1
-myseq_mut <-mutator (myseq,200)
-res1 <- myblastn_tab(myseq = myseq_mut,db = "myseq.fa")
-res1
+if (is.null(res1)) {myres= 0 } else {myres= 1 }
+return(myres)
+}
+# testing with multiple mutations
+# nmut=100
+myfunc(myseq=myseq,nmut = 100)
+mean (replicate(100,myfunc(myseq,100)))
+
+# nmut=150
+myfunc(myseq=myseq,nmut = 150)
+mean (replicate(100,myfunc(myseq,150)))
+
+#nmut=175
+myfunc(myseq=myseq,nmut = 175)
+mean (replicate(100,myfunc(myseq,175)))
+
+# nmut=169 seems to be the limits of BLAST
+myfunc(myseq=myseq,nmut = 169)
+mean (replicate(100,myfunc(myseq,169)))
 ```
 
+# References
+
+EnsemblBacteria 2020, Search results for 'AAC76906', retrieved June 10 2020, <https://bacteria.ensembl.org/Multi/Search/Results?species=all;idx=;q=AAC76906;site=ensemblunit>.
 
 
 
